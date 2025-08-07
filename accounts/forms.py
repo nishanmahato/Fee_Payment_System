@@ -22,7 +22,6 @@ class SchoolAdminLoginForm(forms.Form):
 
 
 
-
 class SchoolAdminRegisterForm(forms.Form):
     username = forms.CharField(
         max_length=50,
@@ -100,6 +99,12 @@ class SchoolAdminRegisterForm(forms.Form):
 
 
     def clean(self):
+        if CustomUser.objects.filter(username=self.cleaned_data["username"]).exists():
+            raise forms.ValidationError("Username already exists")
+        
+        if CustomUser.objects.filter(email=self.cleaned_data["email"]).exists():
+            raise forms.ValidationError("Email already exists")
+        
         if self.cleaned_data["password"] != self.cleaned_data["cpassword"]:
             raise forms.ValidationError("Passwords do not match")
 

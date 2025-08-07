@@ -7,6 +7,7 @@
 {% block sidebar %}
 {% endblock %}
 
+
 {% block content %}
 <div class="w-full flex justify-center p-4">
     <div class="toast toast-end toast-top">
@@ -39,6 +40,9 @@
 
 
             <button class="btn btn-neutral mt-4">Register</button>
+            <a href="{% url 'accounts:school_admin_login' %}" class="mt-4 text-sm text-blue-500">
+                Already have an account? Click here to login
+            </a>
         </fieldset>
     </form>
 
