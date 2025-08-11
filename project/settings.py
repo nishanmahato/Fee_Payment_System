@@ -135,3 +135,17 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 NPM_BIN_PATH = r"C:\Program Files\nodejs\npm.cmd"
 
 AUTH_USER_MODEL = "accounts.CustomUser"
+
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# SMTP settings
+EMAIL_HOST = 'smtp.gmail.com'  # or your SMTP server
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+EMAIL_HOST_USER = 'its.nsnmah@gmail.com'
+EMAIL_HOST_PASSWORD = 'aqjz qdus jemx ovjz'  # Use app password for Gmail
+
+# Default from email
+DEFAULT_FROM_EMAIL = 'its.nsnmah@gmail.com'
