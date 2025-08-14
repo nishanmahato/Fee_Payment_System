@@ -5,6 +5,7 @@ from django.contrib import messages
 from .utils import is_email_valid, forgot_password_email
 from .models import OTP, CustomUser
 from django.contrib.auth.password_validation import validate_password
+from .utils import send_password_change_email
 
 
 def school_admin_register(request):
@@ -33,7 +34,7 @@ def school_admin_login(request):
             login(request, user)
             return redirect("app:dashboard")
         
-        messages.erro(request, "Invalid Username or Password")
+        messages.error(request, "Invalid Username or Password")
         return redirect("accounts:school_admin_login")
 
     form = SchoolAdminLoginForm()
@@ -61,6 +62,7 @@ def forgot_password(request):
             return redirect("accounts:forgot_password")
 
         print(email, "Email sent successfully")
+        messages.success(request, "Email sent Successfully, Please check your inbox.")
 
         return redirect("accounts:otp_confirmation")
     return render(request, "accounts/forgot-password.html")
@@ -84,15 +86,15 @@ def otp_confirmation(request):
 
 def set_new_password(request, user_id=None):
     if request.method == "POST":
-        password1 = request.POST.get("password1")
-        password2 = request.POST.get("password2")
+        password = request.POST.get("password1")
+        cpassword = request.POST.get("password2")
 
-        if password1 != password2:
+        if password != cpassword:
             messages.error(request, "Passwords do not match")
             return redirect("accounts:set_new_password")
 
         try:
-            validate_password(password1)
+            validate_password(password)
         except Exception as e:
             for error in list(e):
                 messages.error(request, str(error))
@@ -104,8 +106,12 @@ def set_new_password(request, user_id=None):
                     messages.error(request, "User does not exist")
                     return redirect("accounts:set_new_password")
 
-            user.set_password(password1)
+            user.set_password(password)
             user.save()
+
+            send_password_change_email(user)
+
+            messages.success(request, "Password change Successfully")
             return redirect("accounts:school_admin_login")
 
     return render(request, "accounts/new-password.html")

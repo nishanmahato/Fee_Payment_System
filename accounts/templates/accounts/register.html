@@ -10,12 +10,19 @@
 
 {% block content %}
 <div class="w-full flex justify-center p-4">
+    <!-- Message -->
     <div class="toast toast-end toast-top">
-        {% for error in form.non_field_errors %}
-        <div class="alert alert-error alert-soft">
-            <span>{{error}}</span>
-        </div>
-        {% endfor %}
+        {% for message in messages %}
+        {% if message.tags == "success" %}
+            <div class="alert alert-success alert-soft">
+                <span>{{ message }}</span>
+            </div>
+        {% elif message.tags == "error" %}
+            <div class="alert alert-error alert-soft">
+                <span>{{ message }}</span>
+            </div>
+        {% endif %}
+    {% endfor %}
     </div>
     <form class="w-1/2 flex flex-col p-4 " method="post" enctype="multipart/form-data">
         {% csrf_token %}
